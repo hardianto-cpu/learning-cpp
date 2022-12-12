@@ -13,14 +13,14 @@ struct dataPelanggan
 {
     string kodePlgn, namaPlgn;
     struct dataBarang brg[50];
-    float subTot, potongan, grandTot;
+    float subTot, potongan, grandTot, totJumlah;
 };
 
 struct dataPelanggan pembeli[100];
 
 float chooseSubtotal(int jumlah)
 {
-    float potongan;
+    float potongan = 0;
     if (jumlah <= 10 && jumlah >= 5)
         potongan = 0.05;
     if (jumlah <= 20 && jumlah >= 11)
@@ -53,12 +53,15 @@ int main()
             cout << "Jumlah Barang: ";
             cin >> pembeli[plg].brg[jmlhBrng].jumlahBeli;
             pembeli[plg].brg[jmlhBrng].totHrg = pembeli[plg].brg[jmlhBrng].hrgSatuan * pembeli[plg].brg[jmlhBrng].jumlahBeli;
-            pembeli[plg].subTot = pembeli[plg].subTot + pembeli[plg].brg[jmlhBrng].totHrg;
+            float potongan = chooseSubtotal(pembeli[plg].brg[jmlhBrng].jumlahBeli) * pembeli[plg].brg[jmlhBrng].totHrg;
+            pembeli[plg].totJumlah = pembeli[plg].totJumlah + pembeli[plg].brg[jmlhBrng].jumlahBeli;
+            pembeli[plg].potongan = pembeli[plg].potongan + potongan;
+            pembeli[plg].subTot = pembeli[plg].subTot + (pembeli[plg].brg[jmlhBrng].totHrg);
             cout << "Total Harga: " << pembeli[plg].brg[jmlhBrng].totHrg << endl;
+            cout << "Sub Total Harga: " << (pembeli[plg].brg[jmlhBrng].totHrg - potongan) << endl;
             cout << "Ada Barang Lain [y/t]: ";
             cin >> conditionBrg;
         } while (conditionBrg == "y");
-        pembeli[plg].potongan = chooseSubtotal(jmlhBrng) * pembeli[plg].subTot;
         pembeli[plg].grandTot = pembeli[plg].subTot - pembeli[plg].potongan;
         cout << "\n\nKode Pelanggan: " << pembeli[plg].kodePlgn << endl;
         cout << "Nama Pelanggan: " << pembeli[plg].namaPlgn << endl;
@@ -77,9 +80,9 @@ int main()
         cout << "------------------------------------------------------------------\n";
 
         cout << "Sub Total Harga: Rp." << int(pembeli[plg].subTot) << endl;
-        cout << "Total Jumlah Barang: " << jmlhBrng << endl;
+        cout << "Total Jumlah Barang: " << pembeli[plg].totJumlah << endl;
         cout << "Potongan: Rp." << pembeli[plg].potongan << endl;
-        cout << "Jumlah Yang Harus Di Bayar: Rp." << int(pembeli[plg].grandTot) << endl;
+        cout << "Jumlah Yang Harus Di Bayar: Rp." << (pembeli[plg].grandTot) << endl;
         jmlhBrng = 0; // reset
         cout << "Input Transaksi Berikutnya [y/n]: ";
         cin >> condition;
